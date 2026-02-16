@@ -1,0 +1,55 @@
+---
+description: 项目架构与前后端启动命令
+alwaysApply: true
+---
+
+# NL2SQL 数据生成系统 - 架构与启动
+
+## 项目架构
+
+```
+前端(Vite+React:3000) ←→ 后端(FastAPI:8000) ←→ MySQL/LLM
+     │                         │
+     └── WebSocket/HTTP        └── 数据库→元数据→表卡片→LLM规划→LLM生成→SQL验证→导出
+```
+
+| 层级 | 技术栈 | 端口 |
+|------|--------|------|
+| 前端 | React, TypeScript, Vite | 3000 |
+| 后端 | Python, FastAPI, Uvicorn | 8000 |
+
+---
+
+## 目录结构
+
+```
+backend/     # 后端: app.py, api/, modules/
+frontend/    # 前端: src/, package.json, vite.config.ts, node_modules/
+```
+
+**说明**：`node_modules` 仅位于 `frontend/` 下，根目录无 `package.json` 与 `node_modules`。前端依赖请在 `frontend/` 内安装与构建。
+
+## 终端启动命令
+
+### 后端
+
+```bash
+cd backend
+conda activate web_sql
+python app.py
+```
+
+### 前端（新终端）
+
+```bash
+cd frontend
+# 首次运行或依赖变更时: npm install
+npm run dev
+```
+
+### 停止
+
+```bash
+# Windows: 双击 stop_all.bat
+# 或按端口结束: netstat -ano | findstr :8000
+```

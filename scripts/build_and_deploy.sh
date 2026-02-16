@@ -5,8 +5,8 @@ echo "========================================="
 echo "构建前端项目"
 echo "========================================="
 
-# 进入项目根目录
-cd "$(dirname "$0")/.."
+# 进入 frontend 目录
+cd "$(dirname "$0")/../frontend"
 
 # 检查Node.js环境
 if ! command -v npm &> /dev/null; then

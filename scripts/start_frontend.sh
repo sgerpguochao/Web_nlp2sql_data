@@ -5,8 +5,8 @@ echo "========================================="
 echo "启动NL2SQL前端开发服务器"
 echo "========================================="
 
-# 进入项目根目录
-cd "$(dirname "$0")/.."
+# 进入 frontend 目录
+cd "$(dirname "$0")/../frontend"
 
 # 检查Node.js环境
 if ! command -v npm &> /dev/null; then
@@ -20,7 +20,7 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
-echo "前端地址: http://localhost:5173"
+echo "前端地址: http://localhost:3000"
 echo "========================================="
 
 # 启动开发服务器

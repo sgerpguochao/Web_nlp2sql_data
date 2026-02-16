@@ -5,8 +5,8 @@ echo "========================================="
 echo "启动NL2SQL后端API服务器"
 echo "========================================="
 
-# 进入项目根目录
-cd "$(dirname "$0")/.."
+# 进入 backend 目录
+cd "$(dirname "$0")/../backend"
 
 # Conda环境名称
 CONDA_ENV_NAME="${CONDA_ENV_NAME:-web_sql}"

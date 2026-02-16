@@ -36,6 +36,7 @@ env/
 
 # Node
 node_modules/
+.vite/
 .env
 .env.local
 .env.*.local
