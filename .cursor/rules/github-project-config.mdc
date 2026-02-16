@@ -1,0 +1,56 @@
+---
+description: NL2SQL Agent 项目 GitHub 提交配置与规范，适用于代码提交、PR、发布等流程
+alwaysApply: true
+---
+
+# NL2SQL Agent 项目 - 全局规则
+
+## 项目配置管理
+
+> 以下配置可根据实际情况修改，便于统一管理 GitHub 相关操作。
+
+```yaml
+project:
+  repo: "https://github.com/sgerpguochao/Web_nlp2sql_data.git"
+  github_username: "sgerpguochao"
+  github_token: "需替换"  # 使用环境变量 GITHUB_TOKEN，切勿提交真实 token
+  default_branch: "main"
+```
+
+### 配置说明
+
+| 字段 | 说明 |
+|------|------|
+| `repo` | GitHub 仓库地址，用于 clone、push、PR 等操作 |
+| `github_username` | GitHub 用户名 |
+| `github_token` | 个人访问令牌，需在 GitHub Settings 生成，切勿提交到版本库 |
+| `default_branch` | 默认主分支名称 |
+
+---
+
+## GitHub 提交规范
+
+### 提交前检查
+
+- 运行相关测试，确保无回归
+- 检查 `.gitignore`，避免提交 `node_modules`、`.env`、token 等敏感文件
+- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)：`feat:`, `fix:`, `docs:`, `refactor:` 等
+
+### 常用命令参考
+
+```bash
+# 克隆仓库
+git clone https://github.com/sgerpguochao/Web_nlp2sql_data.git
+
+# 推送到远程
+git push origin main
+
+# 创建并推送新分支
+git checkout -b feature/xxx
+git push -u origin feature/xxx
+```
+
+### 安全提示
+
+- `github_token` 应通过环境变量或安全存储传入，不要硬编码在规则或代码中
+- 提交前确认 `.env`、`*_token*` 等已加入 `.gitignore`
