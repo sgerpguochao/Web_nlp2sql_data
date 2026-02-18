@@ -29,9 +29,24 @@ frontend/    # 前端: src/, package.json, vite.config.ts, node_modules/
 
 **说明**：`node_modules` 仅位于 `frontend/` 下，根目录无 `package.json` 与 `node_modules`。前端依赖请在 `frontend/` 内安装与构建。
 
-## 终端启动命令
+## 启动与停止命令
 
-### 后端
+### Windows 一键启动（推荐）
+
+双击运行项目根目录的 `start_all.bat`，会同时启动：
+- 后端服务 (端口 8000)
+- 前端服务 (端口 3000)
+- 访问地址: http://localhost:3000
+
+### Windows 一键停止
+
+双击运行 `stop_all.bat`，会停止：
+- 后端服务 (端口 8000)
+- 前端服务 (端口 3000)
+
+### 手动启动（终端命令）
+
+#### 后端
 
 ```bash
 cd backend
@@ -39,7 +54,7 @@ conda activate web_sql
 python app.py
 ```
 
-### 前端（新终端）
+#### 前端（新终端）
 
 ```bash
 cd frontend
@@ -47,7 +62,7 @@ cd frontend
 npm run dev
 ```
 
-### 停止
+### 手动停止
 
 ```bash
 # Windows: 双击 stop_all.bat
