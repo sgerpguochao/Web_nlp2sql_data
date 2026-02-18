@@ -231,6 +231,21 @@ class API {
   }
 
   /**
+   * 下载RAG训练数据
+   */
+  downloadRagFile() {
+    const url = `${API_BASE_URL}/api/download/rag`;
+    
+    // 创建隐藏的下载链接
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ddl_mysql.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  /**
    * 创建WebSocket连接
    */
   createWebSocket(onMessage: (message: WSMessage) => void, onError?: (error: Event) => void): WebSocket {

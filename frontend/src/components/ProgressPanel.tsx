@@ -9,10 +9,12 @@ interface ProgressPanelProps {
   progress: number;
   currentStep: number;
   logs: string[];
+  dbType?: string;
   onDownload?: () => void;
+  onDownloadRag?: () => void;
 }
 
-export function ProgressPanel({ isGenerating, progress, currentStep, logs, onDownload }: ProgressPanelProps) {
+export function ProgressPanel({ isGenerating, progress, currentStep, logs, dbType, onDownload, onDownloadRag }: ProgressPanelProps) {
   const steps = [
     '连接数据库',
     '加载架构',
@@ -24,6 +26,7 @@ export function ProgressPanel({ isGenerating, progress, currentStep, logs, onDow
 
   const estimatedTime = Math.max(0, Math.ceil((6 - currentStep) * 2));
   const isComplete = currentStep === 6 && progress === 100;
+  const isMySQL = dbType === 'mysql';
 
   return (
     <Card className="bg-slate-900/50 border-slate-800 backdrop-blur-sm p-8 rounded-2xl shadow-2xl">
@@ -109,15 +112,25 @@ export function ProgressPanel({ isGenerating, progress, currentStep, logs, onDow
           </div>
         </div>
 
-        {/* Download Button */}
-        <Button
-          onClick={onDownload}
-          disabled={!isComplete}
-          className="w-full bg-gradient-to-r from-[#1F5EFF] to-[#8C4AFF] hover:opacity-90 transition-opacity shadow-lg shadow-[#1F5EFF]/20 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Download className="w-4 h-4 mr-2" />
-          下载数据
-        </Button>
+        {/* Download Buttons */}
+        <div className="grid grid-cols-2 gap-4">
+          <Button
+            onClick={onDownload}
+            disabled={!isComplete}
+            className="bg-gradient-to-r from-[#1F5EFF] to-[#8C4AFF] hover:opacity-90 transition-opacity shadow-lg shadow-[#1F5EFF]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            下载数据
+          </Button>
+          <Button
+            onClick={onDownloadRag}
+            disabled={!isComplete || !isMySQL}
+            className="bg-gradient-to-r from-[#1F5EFF] to-[#8C4AFF] hover:opacity-90 transition-opacity shadow-lg shadow-[#1F5EFF]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            下载rag(mysql)训练数据
+          </Button>
+        </div>
 
         {isComplete && (
           <motion.div

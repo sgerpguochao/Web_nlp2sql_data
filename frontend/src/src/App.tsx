@@ -15,6 +15,7 @@ export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
   const [taskConfig, setTaskConfig] = useState<TaskConfig | null>(null);
+  const [dbType, setDbType] = useState<string>('mysql');
   
   const wsRef = useRef<WebSocket | null>(null);
   const { toast } = useToast();
@@ -55,6 +56,7 @@ export default function App() {
   // 启动生成任务
   const handleStartGeneration = async (config: TaskConfig) => {
     setTaskConfig(config);
+    setDbType(config.db.type);
     setIsGenerating(true);
     setProgress(0);
     setCurrentStep(0);
@@ -149,14 +151,17 @@ export default function App() {
       <nav className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="mx-auto max-w-[1920px] px-8 py-6">
           <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
             <div>
-              <h1 className="bg-gradient-to-r from-[#1F5EFF] to-[#8C4AFF] bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-[#1F5EFF] to-[#8C4AFF] bg-clip-text text-transparent">
                 NL2SQL 自动数据生成器
               </h1>
-              <p className="mt-1 text-slate-400">
+              <p className="mt-1 text-slate-500 text-xs">
                 配置数据库与大模型参数，一键生成训练数据
               </p>
             </div>
+          </div>
             
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3">
@@ -196,7 +201,9 @@ export default function App() {
             progress={progress}
             currentStep={currentStep}
             logs={logs}
+            dbType={dbType}
             onDownload={() => api.downloadFile('latest')}
+            onDownloadRag={() => api.downloadRagFile()}
           />
         </div>
       </div>

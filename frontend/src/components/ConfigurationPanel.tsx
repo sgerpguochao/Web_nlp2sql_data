@@ -28,9 +28,9 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
   const [dbConnectionStatus, setDbConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
 
   // LLM配置
-  const [apiEndpoint, setApiEndpoint] = useState('');
+  const [apiEndpoint, setApiEndpoint] = useState('https://api.deepseek.com');
   const [apiKey, setApiKey] = useState('');
-  const [modelName, setModelName] = useState('qwen2.5-7b-instruct');
+  const [modelName, setModelName] = useState('deepseek-chat');
   const [temperature, setTemperature] = useState([0.7]);
   const [topP, setTopP] = useState([0.9]);
   const [llmConnectionStatus, setLlmConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
@@ -162,10 +162,28 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
   // 开始生成
   const handleStartGeneration = () => {
     // 验证必填字段
-    if (!database) {
+    if (!host || !port || !database || !username) {
       toast({
         title: '配置不完整',
-        description: '请填写数据库名称',
+        description: '请填写完整的数据库配置（主机、端口、数据库名称、用户名）',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!apiEndpoint || !modelName || !apiKey) {
+      toast({
+        title: '配置不完整',
+        description: '请填写完整的LLM配置（API端点、模型名称、API密钥）',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!sampleCount || parseInt(sampleCount) <= 0) {
+      toast({
+        title: '配置不完整',
+        description: '请填写正确的样本数量',
         variant: 'destructive',
       });
       return;
@@ -247,7 +265,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
 
           <div className="space-y-4 pl-11">
             <div className="space-y-2">
-              <Label htmlFor="dbType" className="text-slate-300">数据库类型</Label>
+              <Label htmlFor="dbType" className="text-red-400 font-semibold">数据库类型 *</Label>
               <Select value={dbType} onValueChange={setDbType}>
                 <SelectTrigger id="dbType" className="bg-slate-800/50 border-slate-700 text-slate-100">
                   <SelectValue />
@@ -262,7 +280,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="host" className="text-slate-300">主机地址</Label>
+                <Label htmlFor="host" className="text-red-400 font-semibold">主机地址 *</Label>
                 <Input
                   id="host"
                   value={host}
@@ -272,7 +290,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="port" className="text-slate-300">端口</Label>
+                <Label htmlFor="port" className="text-red-400 font-semibold">端口 *</Label>
                 <Input
                   id="port"
                   value={port}
@@ -284,7 +302,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="dbName" className="text-slate-300">数据库名称 *</Label>
+              <Label htmlFor="dbName" className="text-red-400 font-semibold">数据库名称 *</Label>
               <Input
                 id="dbName"
                 value={database}
@@ -296,7 +314,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-slate-300">用户名</Label>
+                <Label htmlFor="username" className="text-red-400 font-semibold">用户名 *</Label>
                 <Input
                   id="username"
                   value={username}
@@ -306,7 +324,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-300">密码</Label>
+                <Label htmlFor="password" className="text-red-400 font-semibold">密码 *</Label>
                 <Input
                   id="password"
                   type="password"
@@ -350,29 +368,29 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
 
           <div className="space-y-4 pl-11">
             <div className="space-y-2">
-              <Label htmlFor="apiEndpoint" className="text-slate-300">API 端点 *</Label>
+              <Label htmlFor="apiEndpoint" className="text-red-400 font-semibold">API 端点 *</Label>
               <Input
                 id="apiEndpoint"
                 value={apiEndpoint}
                 onChange={(e) => setApiEndpoint(e.target.value)}
-                placeholder="https://api.example.com/v1"
+                placeholder="https://api.deepseek.com"
                 className="bg-slate-800/50 border-slate-700 text-slate-100 placeholder:text-slate-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="modelName" className="text-slate-300">模型名称</Label>
+              <Label htmlFor="modelName" className="text-red-400 font-semibold">模型名称 *</Label>
               <Input
                 id="modelName"
                 value={modelName}
                 onChange={(e) => setModelName(e.target.value)}
-                placeholder="qwen2.5-7b-instruct"
+                placeholder="deepseek-chat"
                 className="bg-slate-800/50 border-slate-700 text-slate-100 placeholder:text-slate-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apiKey" className="text-slate-300">API 密钥 *</Label>
+              <Label htmlFor="apiKey" className="text-red-400 font-semibold">API 密钥 *</Label>
               <Input
                 id="apiKey"
                 type="password"
@@ -476,7 +494,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="sampleCount" className="text-slate-300">样本数量</Label>
+                <Label htmlFor="sampleCount" className="text-red-400 font-semibold">样本数量 *</Label>
                 <Input
                   id="sampleCount"
                   type="number"
@@ -491,7 +509,7 @@ export function ConfigurationPanel({ onStartGeneration, isGenerating, rememberSe
                 <Input
                   id="outputPath"
                   value={outputPath}
-                  onChange={(e) => setOutputPath(e.target.value)}
+                  readOnly
                   placeholder="./data/nl2sql.jsonl"
                   className="bg-slate-800/50 border-slate-700 text-slate-100 placeholder:text-slate-500"
                 />
